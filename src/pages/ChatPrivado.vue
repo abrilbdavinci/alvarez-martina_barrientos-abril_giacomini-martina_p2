@@ -97,7 +97,6 @@ function usePrivateChatNewMessageForm(userRef, otherId) {
             newMessage.value.content = '';
         } catch (error) {
             console.error('Error enviando mensaje privado:', error);
-            // aquí podrías mostrar un toast o similar
         }
     }
 
@@ -131,13 +130,12 @@ const {
         </div>
 
         <!-- Contenedor de mensajes -->
-        <section ref="chatContainer" class="overflow-y-auto max-h-[500px] p-4 mb-4 border border-gray-300 rounded">
-            <h2 class="sr-only">Lista de mensajes</h2>
+        <section ref="chatContainer" class="overflow-y-auto max-h-[500px] p-4 mb-4 border border-gray-300 rounded-md">
 
             <ol v-if="!loadingMessages" class="flex flex-col gap-4">
                 <li v-for="message in messages" :key="message.id" class="p-3 rounded" :class="{
-                    'bg-gray-100 self-start': message.sender_id !== user.id,
-                    'self-end bg-green-100': message.sender_id === user.id
+                    'bg-gray-100 self-start rounded-xl': message.sender_id !== user.id,
+                    'self-end bg-green-100 rounded-xl': message.sender_id === user.id
                 }">
                     <div class="mb-1 text-base text-[#1A1A1A] leading-relaxed">{{ message.content }}</div>
                     <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">{{ formatDate(message.created_at)

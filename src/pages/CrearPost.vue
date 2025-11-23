@@ -20,7 +20,7 @@ export default {
         email: null,
         display_name: null,
         bio: null,
-        career: null,
+        goal: null,
       },
       loading: false,
     };

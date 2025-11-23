@@ -80,7 +80,7 @@ export default {
         Editar perfil
       </RouterLink>
       <RouterLink class="text-blue"
-      :to="`${user.id}/chat`"> Iniciar chat privado con {{ user.display_name || user.email }}
+      :to="`${user.id}/chat`"> Chat privado con {{ user.display_name || user.email }}
 
       </RouterLink>
     </div>

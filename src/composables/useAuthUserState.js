@@ -9,7 +9,7 @@ export default function useAuthUserState() {
         email: null,
         display_name: null,
         bio: null,
-        career: null,
+        goal: null,
         photo_url: null,
     });
 
