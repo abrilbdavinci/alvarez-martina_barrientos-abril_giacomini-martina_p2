@@ -91,6 +91,6 @@ export default {
 
     <footer
         class="fixed bottom-0 left-0 w-full flex justify-center items-center h-16 bg-[#006165] text-white rounded-t-[20px] shadow-sm shadow-gray-300 text-center text-sm md:text-base">
-        <p>Parcial 1 - CWM - DWM4AP | Alvarez Barrientos Giacomini</p>
+        <p>Parcial 2 - CWM - DWM4AP | Alvarez Barrientos Giacomini</p>
     </footer>
 </template>

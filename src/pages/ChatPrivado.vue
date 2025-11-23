@@ -31,8 +31,7 @@ const authUser = useAuthUserState();
 
 // perfil del otro usuario (id desde route.params.id)
 const { user: otherUser, loading: loadingUser } = useUserProfile(route.params.id);
-
-// --- composable local para mensajes del chat privado ---
+//composable local para mensajes del chat privado
 function usePrivateChatMessages(userRef, otherId) {
     const messages = ref([]);
     const loadingMessages = ref(false);
@@ -44,7 +43,7 @@ function usePrivateChatMessages(userRef, otherId) {
         loadingMessages.value = true;
 
         try {
-            // Obtener últimos mensajes
+            // obtener últimos mensajes
             messages.value = await fetchLastPrivateChatMessages(userRef.value.id, otherId);
             loadingMessages.value = false;
 
@@ -67,7 +66,6 @@ function usePrivateChatMessages(userRef, otherId) {
                 }
             );
         } catch (error) {
-            // manejar error si es necesario
             loadingMessages.value = false;
             console.error('Error cargando mensajes privados:', error);
         }
@@ -84,7 +82,7 @@ function usePrivateChatMessages(userRef, otherId) {
     };
 }
 
-// --- composable local para nuevo mensaje ---
+//composable local para nuevo mensaje
 function usePrivateChatNewMessageForm(userRef, otherId) {
     const newMessage = ref({ content: '' });
 
@@ -129,7 +127,6 @@ const {
             <AppH1>Chat privado con {{ otherUser.email }}</AppH1>
         </div>
 
-        <!-- Contenedor de mensajes -->
         <section ref="chatContainer" class="overflow-y-auto max-h-[500px] p-4 mb-4 border border-gray-300 rounded-md">
 
             <ol v-if="!loadingMessages" class="flex flex-col gap-4">
