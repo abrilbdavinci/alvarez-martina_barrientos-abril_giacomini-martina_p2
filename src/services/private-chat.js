@@ -141,7 +141,7 @@ export async function subscribeToNewPrivateChatMessages(senderId, receiverId, ca
 
 
 // ------------------------------------------------------------------
-// Tests para probar nuestro chat privado.
+// Tests para probar chat privado.
 // La idea de "testing" se basa en armar un código (generalmente 
 // funciones o métodos) que realice una acción contra el sistema, y
 // verifique que el resultado de esa acción cumpla con lo esperado.

@@ -68,8 +68,8 @@ export default {
 </script>
 
 <template>
-  <div class="flex justify-center items-start min-h-[80vh] ">
-    <div class="w-5xl p-8 rounded-[100px] flex flex-col gap-6">
+  <div class="flex justify-center items-start min-h-[80vh] max-w-2xl">
+    <div class="w-6xl p-8 rounded-[100px] flex flex-col gap-6">
       
       <AppH1 class="text-[#006165] text-center text-2xl">
         Crear nuevo post
@@ -105,7 +105,7 @@ export default {
           :disabled="loading"
           class="w-40 bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[20px] transition-all duration-200 disabled:opacity-50"
         >
-          Publicar
+          Crear
         </button>
       </form>
     </div>

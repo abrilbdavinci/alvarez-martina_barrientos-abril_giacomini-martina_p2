@@ -131,7 +131,7 @@ const {
 
             <ol v-if="!loadingMessages" class="flex flex-col gap-4">
                 <li v-for="message in messages" :key="message.id" class="p-3 rounded" :class="{
-                    'bg-gray-100 self-start rounded-xl': message.sender_id !== user.id,
+                    'bg-gray-200 self-start rounded-xl': message.sender_id !== user.id,
                     'self-end bg-green-100 rounded-xl': message.sender_id === user.id
                 }">
                     <div class="mb-1 text-base text-[#1A1A1A] leading-relaxed">{{ message.content }}</div>
@@ -158,7 +158,7 @@ const {
                 <textarea id="content" class="w-full p-2 border border-gray-400 rounded-lg" v-model="newMessage.content"
                     placeholder="Escribe tu mensaje..."></textarea>
                 <button type="submit"
-                    class="transition px-10 py-1 rounded-xl bg-[#179BAE] hover:bg-[#148da0] text-white">Enviar</button>
+                    class="my-auto w-50 bg-[#179BAE] text-white font-medium px-6 py-3 rounded-full transition-all duration-200 disabled:opacity-50">Enviar</button>
             </form>
         </section>
     </section>

@@ -79,7 +79,7 @@ export default {
         class="bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[100px] transition-all duration-200">
         Editar perfil
       </RouterLink>
-      <RouterLink class="text-blue"
+      <RouterLink class=" bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[20px] transition-all duration-200 disabled:opacity-50"
       :to="`${user.id}/chat`"> Chat privado con {{ user.display_name || user.email }}
 
       </RouterLink>
