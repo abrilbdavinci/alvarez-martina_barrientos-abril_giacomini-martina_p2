@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+.hero{
+    background-image: url('/header-image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 3rem;
+    border-radius: 20px;
+
+
+    /* Animación */
+    animation: bgZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes bgZoom {
+    0% {
+        background-size: 100% 100%;
+        background-position: center top;
+    }
+
+    50% {
+        background-size: 110% 110%;
+        background-position: center center;
+    }
+
+    100% {
+        background-size: 120% 120%;
+        background-position: center bottom;
+    }
+}
+
+.img-app{
+    background-image: url('/mockup-app.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

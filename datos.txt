@@ -1,0 +1,9 @@
+Carrera: Diseño y Programación Web
+Materia: Clientes Web Mobile
+Cuatrimestre: 4°
+Año: 2025
+Turno: Mañana
+Comisión: DWM4AP
+Apellido y nombre: Alvarez Martina, Barrientos Abril, Giacomini Martina
+Docente: Gallino, Santiago
+Carácter de entrega: 1er parcial
