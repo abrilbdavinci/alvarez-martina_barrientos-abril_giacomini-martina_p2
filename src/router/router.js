@@ -10,6 +10,7 @@ import Register from "../pages/Register.vue";
 import MiPerfil from "../pages/MiPerfil.vue";
 import MiPerfilEditar from '../pages/MiPerfilEditar.vue';
 import UsuarioPerfil from '../pages/UsuarioPerfil.vue';
+import ChatPrivado from "../pages/ChatPrivado.vue";
 
 // Definimos la lista de rutas de nuestra aplicación.
 // Cada objeto representa una ruta con su respectivo componente y metadatos opcionales.
@@ -21,6 +22,7 @@ const routes = [
   { path: "/register", component: Register },
   { path: "/mi-perfil", component: MiPerfil, meta: { requiresAuth: true } },
   { path: '/usuario/:id',         component: UsuarioPerfil,     meta: { requiresAuth: true, }, },
+  { path: '/usuario/:id/chat', component: ChatPrivado, meta: { requiresAuth: true } },
   { path: '/mi-perfil/editar', component: MiPerfilEditar, meta: { requiresAuth: true } },
 ];
 

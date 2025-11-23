@@ -79,6 +79,10 @@ export default {
         class="bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[100px] transition-all duration-200">
         Editar perfil
       </RouterLink>
+      <RouterLink class="text-blue"
+      :to="`${user.id}/chat`"> Iniciar chat privado con {{ user.display_name || user.email }}
+
+      </RouterLink>
     </div>
 
     <section class="mb-10 p-6">
