@@ -200,7 +200,7 @@ async function handleSubmit() {
         </div>
 
         <div class="mb-3">
-          <label for="goal" class="block mb-1 font-semibold text-[#006165]">Carrera / Objetivo</label>
+          <label for="goal" class="block mb-1 font-semibold text-[#006165]">Objetivo</label>
           <input id="goal" type="text" v-model="formData.goal"
                  class="w-full p-2 border border-gray-400 rounded-[100px] focus:ring-2 focus:ring-[#179BAE] outline-none" />
         </div>

@@ -46,7 +46,7 @@ export async function fetchPostById(id) {
 
   const { data, error } = await supabase
     .from('posts')
-    .select('id, sender_id, user_email, theme, content, image_url, image_path, created_at')
+    .select('id, sender_id, user_email, theme, content, image_url_1, image_path_1, image_url_2, image_path_2, created_at')
     .eq('id', id)
     .maybeSingle()
 
@@ -55,7 +55,13 @@ export async function fetchPostById(id) {
     throw error
   }
 
-  return data ?? null
+  if (!data) return null
+
+  // Resolver URLs públicas de las imágenes
+  data.image_url_1 = data.image_url_1 || (data.image_path_1 ? await getFileURL(data.image_path_1, POSTS_BUCKET) : null)
+  data.image_url_2 = data.image_url_2 || (data.image_path_2 ? await getFileURL(data.image_path_2, POSTS_BUCKET) : null)
+
+  return data
 }
 
 /** Traer posts de un usuario por sender_id */

@@ -109,7 +109,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex justify-center min-h-[80vh] max-w-full p-8">
+  <div class="flex justify-center min-h-[80vh] max-w-full">
     <div class="w-6xl flex flex-col gap-6">
       <AppH1 class="text-center text-2xl text-[#006165]">Crear nuevo post</AppH1>
 
@@ -128,13 +128,13 @@ async function handleSubmit() {
 
         <div class="flex gap-4">
           <div class="w-1/2 flex flex-col gap-1">
-            <label class="font-medium text-[#4B4B4B]">Imagen 1</label>
+            <label class="font-medium text-[#4B4B4B]">Imagen</label>
             <input type="file" accept="image/*" @change="e => onFileChange(e, 1)" class="w-full"/>
             <img v-if="imagePreview1" :src="imagePreview1" class="h-32 object-cover rounded-md border mt-1"/>
           </div>
 
           <div class="w-1/2 flex flex-col gap-1">
-            <label class="font-medium text-[#4B4B4B]">Imagen 2</label>
+            <label class="font-medium text-[#4B4B4B]">Imagen</label>
             <input type="file" accept="image/*" @change="e => onFileChange(e, 2)" class="w-full"/>
             <img v-if="imagePreview2" :src="imagePreview2" class="h-32 object-cover rounded-md border mt-1"/>
           </div>

@@ -84,7 +84,7 @@ export default {
                         <img 
                             :src="post.image_url_1" 
                             alt="Imagen del post 1" 
-                            class="w-150 h-auto object-cover object-center"
+                            class="w-100 h-auto object-cover object-center"
                         />
                     </div>
 
@@ -93,7 +93,7 @@ export default {
                         <img 
                             :src="post.image_url_2" 
                             alt="Imagen del post 2" 
-                            class="w-150 h-auto object-cover object-center"
+                            class="w-100 h-auto object-cover object-center"
                         />
                     </div>
 

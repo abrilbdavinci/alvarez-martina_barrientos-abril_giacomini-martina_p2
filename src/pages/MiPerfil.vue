@@ -65,7 +65,7 @@ watch(user, (u) => {
 
 <template>
 
-    <section class="w-full mx-auto py-10">
+    <section class="w-full mx-auto">
         <!-- Foto de perfil -->
         <div
             class="w-34 h-34 rounded-full overflow-hidden mb-6 border-2 border-gray-300 flex items-center justify-center">
@@ -114,9 +114,9 @@ watch(user, (u) => {
 
                     <div v-if="post.image_url_1 || post.image_url_2" class="flex gap-2">
                         <img v-if="post.image_url_1" :src="post.image_url_1"
-                            :class="post.image_url_2 ? 'w-1/2' : 'w-full'" class="h-32 object-cover rounded-md" />
+                            :class="post.image_url_2 ? 'w-1/2' : 'w-full'" class="h-auto object-cover rounded-md" />
                         <img v-if="post.image_url_2" :src="post.image_url_2"
-                            :class="post.image_url_1 ? 'w-1/2' : 'w-full'" class="h-32 object-cover rounded-md" />
+                            :class="post.image_url_1 ? 'w-1/2' : 'w-full'" class="h-auto object-cover rounded-md" />
                     </div>
                 </li>
 
