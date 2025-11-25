@@ -86,7 +86,7 @@ export default {
                         Mi perfil
                     </RouterLink>
                 </li>
-                <li class="text-[#727F81FF]">{{ user.email }}</li>
+                <li class="text-[#727F81FF]">Bienvenido, {{ user.email }}</li>
                 <li>
                     <form action="#" @submit.prevent="handleLogout" class="m-0">
                         <button type="submit"

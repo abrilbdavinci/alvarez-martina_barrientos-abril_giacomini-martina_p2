@@ -172,7 +172,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <section class="w-full mx-auto py-10">
+  <section class="w-full mx-auto">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6">
       <AppH1 class="text-3xl font-bold text-[#006165] mb-2 sm:mb-0">Editar mi perfil</AppH1>
     </div>
@@ -188,7 +188,7 @@ async function handleSubmit() {
     <form @submit.prevent="handleSubmit" class="mb-10 p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="md:col-span-2">
         <div class="mb-3">
-          <label for="display_name" class="block mb-1 font-semibold text-[#006165]">Usuario</label>
+          <label for="display_name" class="block mb-1 font-semibold text-[#006165]">Nombre de usuario</label>
           <input id="display_name" type="text" v-model="formData.display_name"
                  class="w-full p-2 border border-gray-400 rounded-[100px] focus:ring-2 focus:ring-[#179BAE] outline-none" />
         </div>
