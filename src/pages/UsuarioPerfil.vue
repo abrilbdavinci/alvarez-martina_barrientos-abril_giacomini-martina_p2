@@ -5,6 +5,7 @@ import { RouterLink } from 'vue-router';
 import { fetchUserProfileById } from '../services/user-profiles';
 import { fetchPosts } from '../services/posts';
 import { subscribeToAuthStateChanges } from '../services/auth';
+import { getFileURL } from '../services/storage.js';
 
 export default {
   name: 'UsuarioPerfil',
@@ -17,6 +18,7 @@ export default {
         display_name: '',
         bio: '',
         goal: '',
+        photo_url: null, // nueva propiedad para la foto
       },
       posts: [],
       error: null,
@@ -31,6 +33,9 @@ export default {
         year: 'numeric',
       });
     },
+    getImageUrl(path) {
+      return path ? getFileURL(path) : null;
+    }
   },
   async mounted() {
     try {
@@ -51,6 +56,7 @@ export default {
         display_name: profile?.display_name || '',
         bio: profile?.bio || '',
         goal: profile?.goal || '',
+        photo_url: profile?.photo_url || null,
       };
 
       // Filtrar posts que pertenecen al usuario
@@ -68,9 +74,9 @@ export default {
 };
 </script>
 
-
 <template>
-  <section class="w-full mx-auto  py-10">
+  <section class="w-full mx-auto py-10">
+
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6">
       <AppH1 class="text-3xl font-bold text-[#006165] mb-2 sm:mb-0">
         Perfil de {{ user.display_name || user.email }}
@@ -79,12 +85,19 @@ export default {
         class="bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[100px] transition-all duration-200">
         Editar perfil
       </RouterLink>
-      <RouterLink class=" bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[20px] transition-all duration-200 disabled:opacity-50"
-      :to="`${user.id}/chat`"> Chat privado con {{ user.display_name || user.email }}
-
+      <RouterLink :to="`${user.id}/chat`"
+        class="bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[20px] transition-all duration-200">
+        Chat privado con {{ user.display_name || user.email }}
       </RouterLink>
     </div>
 
+    <!-- Foto de perfil -->
+    <section class="mb-6">
+      <img v-if="user.photo_url" :src="getImageUrl(user.photo_url)" alt="Foto de perfil"
+        class="w-24 h-24 rounded-full object-cover border border-gray-200 mb-4" />
+    </section>
+
+    <!-- Info del usuario -->
     <section class="mb-10 p-6">
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
         <div class="sm:col-span-2">
@@ -93,8 +106,7 @@ export default {
         </div>
         <div>
           <dt class="mb-1 font-bold text-[#006165] uppercase text-sm">Email</dt>
-          <dd class="text-[#4B4B4B] p-2 bg-white rounded-lg border border-gray-200">{{ user.email || 'Sin especificar'
-            }}</dd>
+          <dd class="text-[#4B4B4B] p-2 bg-white rounded-lg border border-gray-200">{{ user.email || 'Sin especificar' }}</dd>
         </div>
         <div>
           <dt class="mb-1 font-bold text-[#006165] uppercase text-sm">Usuario</dt>
@@ -102,23 +114,32 @@ export default {
         </div>
         <div class="sm:col-span-2">
           <dt class="mb-1 font-bold text-[#006165] uppercase text-sm">Objetivo</dt>
-          <dd class="text-[#4B4B4B] p-2 bg-white rounded-lg border border-gray-200">{{ user.goal || 'Sin especificar' }}
-          </dd>
+          <dd class="text-[#4B4B4B] p-2 bg-white rounded-lg border border-gray-200">{{ user.goal || 'Sin especificar' }}</dd>
         </div>
       </dl>
     </section>
 
+    <!-- Publicaciones -->
     <section class="mt-8" v-if="posts.length">
-      <h2 class="text-xl font-bold text-[#006165] mb-6 border-b border-[#50B7C5] pb-2">Publicaciones de {{ user.email }}
-      </h2>
+      <h2 class="text-xl font-bold text-[#006165] mb-6 border-b border-[#50B7C5] pb-2">Publicaciones de {{ user.email }}</h2>
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[500px] overflow-y-auto">
         <li v-for="post in posts" :key="post.id"
           class="p-5 rounded-[20px] shadow-md border border-[#50B7C5] bg-white hover:shadow-lg transition duration-300">
           <PostTheme class="font-medium mb-2">{{ post.theme }}</PostTheme>
           <p class="text-base text-[#006165] mb-3 leading-relaxed">{{ post.content }}</p>
+
+          <!-- Mostrar imágenes del post si existen -->
+          <div v-if="post.image_url_1 || post.image_url_2" class="flex gap-2">
+            <img v-if="post.image_url_1" :src="getImageUrl(post.image_url_1)"
+              :class="post.image_url_2 ? 'w-1/4' : 'w-1/2'" class="h-auto object-cover rounded-md" />
+            <img v-if="post.image_url_2" :src="getImageUrl(post.image_url_2)"
+              :class="post.image_url_1 ? 'w-1/4' : 'w-1/2'" class="h-auto object-cover rounded-md" />
+          </div>
+
           <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">{{ formatDate(post.created_at) }}</div>
         </li>
       </ul>
     </section>
+
   </section>
 </template>

@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { supabase } from "../services/supabase";
+import { createRouter, createWebHistory } from 'vue-router'
+import { supabase } from '../services/supabase.js'
 
-// Importamos los componentes (páginas)
+// Importamos los componentes (páginas) con imports directos
 import Home from "../pages/Home.vue";
 import Publicaciones from "../pages/Publicaciones.vue";
 import CrearPost from "../pages/CrearPost.vue";
@@ -11,48 +11,59 @@ import MiPerfil from "../pages/MiPerfil.vue";
 import MiPerfilEditar from '../pages/MiPerfilEditar.vue';
 import UsuarioPerfil from '../pages/UsuarioPerfil.vue';
 import ChatPrivado from "../pages/ChatPrivado.vue";
+import PostDetalle from "../pages/PostDetalle.vue";
+import MiPerfilEditarAvatar from '../pages/MiPerfilEditarAvatar.vue';
 
-// Definimos la lista de rutas de nuestra aplicación.
-// Cada objeto representa una ruta con su respectivo componente y metadatos opcionales.
+
 const routes = [
-  { path: "/", component: Home },
-  { path: "/publicaciones", component: Publicaciones },
-  { path: "/crear-post", component: CrearPost, meta: { requiresAuth: true } },
-  { path: "/login", component: Login },
-  { path: "/register", component: Register },
-  { path: "/mi-perfil", component: MiPerfil, meta: { requiresAuth: true } },
-  { path: '/usuario/:id',         component: UsuarioPerfil,     meta: { requiresAuth: true, }, },
-  { path: '/usuario/:id/chat', component: ChatPrivado, meta: { requiresAuth: true } },
-  { path: '/mi-perfil/editar', component: MiPerfilEditar, meta: { requiresAuth: true } },
-];
+  { path: '/', name: 'Home', component: Home },
+  { path: '/publicaciones', name: 'Publicaciones', component: Publicaciones },
+  { path: '/post/:id', name: 'PostDetalle', component: PostDetalle, props: true },
+  { path: '/crear-post', name: 'CrearPost', component: CrearPost, meta: { requiresAuth: true } },
+  { path: '/login', name: 'Login', component: Login, meta: { guestOnly: true } },
+  { path: '/register', name: 'Register', component: Register, meta: { guestOnly: true } },
+  { path: '/mi-perfil', name: 'MiPerfil', component: MiPerfil, meta: { requiresAuth: true } },
+  { path: '/mi-perfil/editar', name: 'MiPerfilEditar', component: MiPerfilEditar, meta: { requiresAuth: true } },
+  { path: '/mi-perfil/editar/foto',   component: MiPerfilEditarAvatar,   meta: { requiresAuth: true, }, },
+  { path: '/usuario/:id', name: 'UsuarioPerfil', component: UsuarioPerfil, props: true },
+  { path: '/usuario/:id/chat', name: 'ChatPrivado', component: ChatPrivado, props: true, meta: { requiresAuth: true } },
+  
+]
 
-// Creamos el router principal usando el historial HTML5 (sin hashes en la URL)
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});
-
-// Antes de cada navegación, verificamos si la ruta requiere autenticación.
-// Si el usuario no está autenticado, lo redirigimos al login.
-// Esta verificación mejora la **usabilidad**, pero no reemplaza la seguridad del backend.
-router.beforeEach(async (to, from) => {
-  if (to.meta.requiresAuth) {
-    // Obtenemos el usuario actual desde Supabase
-    const { data } = await supabase.auth.getUser();
-    const user = data.user;
-
-    // Si no hay usuario logueado, redirigimos al login
-    if (!user) {
-      return "/login";
-    }
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    return { left: 0, top: 0 }
   }
+})
 
-  // Tanto "to" como "from" son objetos con información de la ruta
-  // console.group('🚦 Rutas');
-  // console.log("Navegando desde: ", from);
-  // console.log("Navegando hacia: ", to);
-  // console.groupEnd();
-});
+router.beforeEach(async (to) => {
+  const requiresAuth = to.matched.some(r => r.meta?.requiresAuth)
+  const guestOnly = to.matched.some(r => r.meta?.guestOnly)
 
-// Exportamos el router para usarlo en main.js
-export default router;
+  if (!requiresAuth && !guestOnly) return true
+
+  try {
+    const { data } = await supabase.auth.getUser()
+    const user = data?.user ?? null
+
+    if (requiresAuth && !user) {
+      return { name: 'Login', query: { redirect: to.fullPath } }
+    }
+
+    if (guestOnly && user) {
+      const redirectTo = to.query?.redirect || '/'
+      return redirectTo
+    }
+
+    return true
+  } catch (err) {
+    console.error('Error en router guard:', err)
+    if (requiresAuth) return { name: 'Login', query: { redirect: to.fullPath } }
+    return true
+  }
+})
+
+export default router

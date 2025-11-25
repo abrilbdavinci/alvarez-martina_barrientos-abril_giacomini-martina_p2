@@ -5,21 +5,40 @@ export default {
     name: 'App',
     data() {
         return {
+            // El estado inicial del usuario debe coincidir con lo que devuelve el observer
             user: {
                 id: null,
                 email: null,
+                avatar_url: null, // Asumimos que esta propiedad se completa en auth.js
             },
-            
+            unsubscribe: null, // Para guardar la función de desuscripción
         }
     },
+
     methods: {
         handleLogout() {
             logout();
-            this.$router.push('/login');
+            // Asegúrate de que $router esté disponible (si usas Vue Router)
+            if (this.$router) { 
+                this.$router.push('/login');
+            } else {
+                // Si no hay router, puedes recargar la página o manejar la vista de otra forma
+                console.warn('Vue Router no está disponible para la redirección.');
+            }
         },
     },
     mounted() {
-        subscribeToAuthStateChanges(newUserState => this.user = newUserState);
+        // Guardamos la función de desuscripción
+        this.unsubscribe = subscribeToAuthStateChanges(newUserState => {
+            // console.log('Estado de auth actualizado:', newUserState);
+            this.user = newUserState;
+        });
+    },
+    // Es buena práctica desuscribirse cuando el componente se destruye
+    beforeUnmount() { 
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
     }
 }
 </script>
@@ -28,7 +47,6 @@ export default {
     <nav
         class="fixed top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-10 py-3 bg-[#E9F3F4] rounded-b-[20px] z-50 transition-all duration-300">
 
-        <!-- Logo / título -->
         <div class="brand flex items-center gap-2">
             <img src="/favicon/favicon.ico" alt="" class="w-10 h-10 sm:w-12 sm:h-12 md:w-8 md:h-8" />
             <RouterLink to="/">
@@ -39,7 +57,6 @@ export default {
 
         </div>
 
-        <!-- Menú -->
         <ul
             class="flex items-center gap-2 sm:gap-3 md:gap-6 text-sm md:text-base font-medium text-[#1A1A1A] flex-wrap justify-end">
 
@@ -84,7 +101,7 @@ export default {
     </nav>
 
     <main
-        class="mx-auto max-w-7xl flex flex-col justify-start items-center min-h-screen pt-24 pb-24 px-4 sm:px-4 md:px-4 lg:px-0 bg-white text-[#1A1A1A]">
+        class="mx-auto max-w-7xl flex flex-col justify-start items-center min-h-screen py-20 px-4 sm:px-4 md:px-4 lg:px-0 bg-white text-[#1A1A1A]">
         <RouterView />
     </main>
 

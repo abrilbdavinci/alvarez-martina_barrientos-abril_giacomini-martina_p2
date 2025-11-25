@@ -11,7 +11,7 @@
     aspect-ratio: 1;
     border-radius: 50%;
     border: 8px solid #ddd;
-    border-right-color: #333;
+    border-right-color: #3d797e;
     animation: l2 1s infinite linear;
 }
 @keyframes l2 {
