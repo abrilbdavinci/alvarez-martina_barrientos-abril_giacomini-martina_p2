@@ -20,8 +20,6 @@ async function loadUserProfile(userId) {
     try {
         const profile = await fetchUserProfileById(userId)
         if (profile) {
-            // si tu composable no actualiza automáticamente, podés manejar local
-            // Pero aquí confiamos en que useAuthUserState ya sincroniza
         }
         await loadUserPosts(profile?.email ?? user.value?.email)
     } catch (err) {
@@ -52,13 +50,12 @@ function formatDate(dateString) {
     return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
-/* cuando cambia el user, recargamos perfil */
+/* cuando cambia el user, recarga perfil */
 watch(user, (u) => {
     if (!u || !u.id) {
         posts.value = []
         return
     }
-    // preferimos email del perfil si está en user (useAuthUserState debería traerlo)
     loadUserProfile(u.id)
 }, { immediate: true })
 </script>
@@ -66,18 +63,13 @@ watch(user, (u) => {
 <template>
 
     <section class="w-full mx-auto">
-        <!-- Foto de perfil -->
         <div
             class="w-34 h-34 rounded-full overflow-hidden mb-6 border-2 border-gray-300 flex items-center justify-center">
             <img v-if="user.photo_url" :src="getFileURL(user.photo_url)" alt="Foto de perfil"
                 class="w-full h-full object-cover" />
             <span v-else class="text-gray-500 text-sm text-center">Sin foto de perfil</span>
         </div>
-
-        <!-- Título y botón editar -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-
-
             <AppH1 class="text-3xl font-bold text-[#006165] mb-2 sm:mb-0">Mi perfil</AppH1>
             <RouterLink to="/mi-perfil/editar"
                 class="bg-[#179BAE] text-white font-medium px-6 py-2 rounded-[100px] transition-all duration-200">Editar
@@ -85,7 +77,6 @@ watch(user, (u) => {
         </div>
         <section class="mb-10 p-6">
             <div class="flex gap-4">
-
                 <div class="w-3/4">
                     <div class="ms-4 mb-8 italic text-gray-800">{{ user.bio || 'Sin especificar...' }}</div>
 
@@ -100,8 +91,6 @@ watch(user, (u) => {
                 </div>
             </div>
         </section>
-
-
 
         <section class="mt-8">
             <h2 class="text-xl font-bold text-[#006165] mb-6 border-b border-[#50B7C5] pb-2">Mis publicaciones</h2>

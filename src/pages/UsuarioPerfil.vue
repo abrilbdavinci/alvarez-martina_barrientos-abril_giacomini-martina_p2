@@ -18,7 +18,7 @@ export default {
         display_name: '',
         bio: '',
         goal: '',
-        photo_url: null, // nueva propiedad para la foto
+        photo_url: null, 
       },
       posts: [],
       error: null,

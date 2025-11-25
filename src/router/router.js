@@ -12,7 +12,6 @@ import MiPerfilEditar from '../pages/MiPerfilEditar.vue';
 import UsuarioPerfil from '../pages/UsuarioPerfil.vue';
 import ChatPrivado from "../pages/ChatPrivado.vue";
 import PostDetalle from "../pages/PostDetalle.vue";
-import MiPerfilEditarAvatar from '../pages/MiPerfilEditarAvatar.vue';
 
 
 const routes = [
@@ -24,7 +23,6 @@ const routes = [
   { path: '/register', name: 'Register', component: Register, meta: { guestOnly: true } },
   { path: '/mi-perfil', name: 'MiPerfil', component: MiPerfil, meta: { requiresAuth: true } },
   { path: '/mi-perfil/editar', name: 'MiPerfilEditar', component: MiPerfilEditar, meta: { requiresAuth: true } },
-  { path: '/mi-perfil/editar/foto',   component: MiPerfilEditarAvatar,   meta: { requiresAuth: true, }, },
   { path: '/usuario/:id', name: 'UsuarioPerfil', component: UsuarioPerfil, props: true },
   { path: '/usuario/:id/chat', name: 'ChatPrivado', component: ChatPrivado, props: true, meta: { requiresAuth: true } },
   

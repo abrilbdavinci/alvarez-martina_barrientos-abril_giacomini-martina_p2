@@ -1,16 +1,4 @@
 <script setup>
-/**
- * MiPerfilEditar.vue (Composition API)
- * - NO modifica auth.js (lo respeta tal como lo tenés).
- * - Usa storage.uploadFile + storage.getFileURL para subir imagenes.
- * - Luego llama updateAuthUser({ photo_path, photo_url, ... }) para persistir los datos.
- *
- * Requisitos:
- * - services/storage.js exporte: uploadFile(path, file, bucket, options) y getFileURL(path, bucket)
- *   (la versión recomendada devuelve { path, publicUrl } o al menos getFileURL puede generar la URL)
- * - services/auth.js exporte: updateAuthUser(data) y subscribeToAuthStateChanges OR composable useAuthUserState
- * - user_profiles debe tener columnas photo_path y/o photo_url (si no las tenés, añadilas).
- */
 
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -20,7 +8,7 @@ import AppLoader from '../components/AppLoader.vue'
 
 import useAuthUserState from '../composables/useAuthUserState.js'
 import { updateAuthUser } from '../services/auth.js'
-import { uploadFile, getFileURL } from '../services/storage.js' // ajustar si tus nombres son distintos
+import { uploadFile, getFileURL } from '../services/storage.js' 
 
 const router = useRouter()
 const user = useAuthUserState() // composable que devuelve ref(userObject)
@@ -49,11 +37,10 @@ function syncFromUser(u) {
   formData.value.bio = u.bio ?? null
   formData.value.goal = u.goal ?? null
 
-  // photo_url has priority
+  // photo_url tiene prioridad
   if (u.photo_url) {
     imageData.value.existingUrl = u.photo_url
   } else if (u.photo_path) {
-    // try to build a public url from the path (works if bucket is public or if getFileURL does signed url)
     imageData.value.existingUrl = getFileURL(u.photo_path) ?? null
   } else {
     imageData.value.existingUrl = null
@@ -68,12 +55,10 @@ watch(user, (u) => {
   syncFromUser(u)
 }, { immediate: true })
 
-/* ---------- Image handlers ---------- */
+/* ---------- Handlers de imagen ---------- */
 function handleImageChange(e) {
   if (loading.value) return
   const file = e.target.files?.[0] ?? null
-
-  // revoke previous preview if any
   if (imageData.value.preview) {
     URL.revokeObjectURL(imageData.value.preview)
     imageData.value.preview = null
@@ -82,8 +67,6 @@ function handleImageChange(e) {
   imageData.value.file = file
 
   if (!file) return
-
-  // create object url for preview
   imageData.value.preview = URL.createObjectURL(file)
 }
 
@@ -94,30 +77,20 @@ onUnmounted(() => {
   }
 })
 
-/* ---------- Upload helper (uses storage.uploadFile) ---------- */
 async function uploadAvatarFile(file) {
-  // prepare a safe filename/path: avatars/{userId}/{timestamp}_{name}
   const uid = user.value?.id
   if (!uid) throw new Error('No hay usuario autenticado para subir la imagen')
 
   const safeName = (file.name || 'avatar').replace(/\s+/g, '_')
   const path = `avatars/${uid}/${Date.now()}_${safeName}`
 
-  // uploadFile debe devolver información util. Algunas implementaciones retornan { path, publicUrl }
-  // pero si la tuya devuelve otra cosa, adaptá el retorno.
   const result = await uploadFile(path, file, 'avatars') // bucket 'avatars' por defecto
-  // result podría ser { path: '...', publicUrl: '...' } o bien supabase response. Manejo flexible abajo.
-
-  // If uploadFile returns the raw data object (supabase response), try to extract path:
-  // - If your uploadFile follows the version recommended, it returns { path, publicUrl }
-  // - Si no, intenta asumir que `result.path` existe o que `result.data.path` existe.
   let uploadedPath = null
   let publicUrl = null
 
   if (!result) {
-    // uploadFile returned nothing -> try to build path from our `path` variable
     uploadedPath = path
-    publicUrl = getFileURL(uploadedPath) // may be null for private buckets
+    publicUrl = getFileURL(uploadedPath) 
   } else if (result.path) {
     uploadedPath = result.path
     publicUrl = result.publicUrl ?? getFileURL(result.path)
@@ -125,7 +98,6 @@ async function uploadAvatarFile(file) {
     uploadedPath = result.data.path
     publicUrl = result.publicUrl ?? getFileURL(uploadedPath)
   } else {
-    // fallback: assume we uploaded to `path`
     uploadedPath = path
     publicUrl = getFileURL(uploadedPath)
   }
@@ -133,19 +105,18 @@ async function uploadAvatarFile(file) {
   return { path: uploadedPath, publicUrl }
 }
 
-/* ---------- Submit ---------- */
 async function handleSubmit() {
   try {
     feedback.value = { message: null, type: 'success' }
     loading.value = true
 
-    // 1) Si hay imagen nueva, subirla primero
+    // Si hay imagen nueva, subirla primero
     let uploadResult = null
     if (imageData.value.file) {
       uploadResult = await uploadAvatarFile(imageData.value.file)
     }
 
-    // 2) Preparar payload para updateAuthUser (actualiza user_profiles)
+    // Preparar payload para updateAuthUser (actualiza user_profiles)
     const payload = {
       display_name: formData.value.display_name,
       bio: formData.value.bio,
@@ -155,12 +126,12 @@ async function handleSubmit() {
     if (uploadResult?.path) payload.photo_path = uploadResult.path
     if (uploadResult?.publicUrl) payload.photo_url = uploadResult.publicUrl
 
-    // 3) Llamar a updateAuthUser (tu auth.js exporta esta función)
+    // Llamar a updateAuthUser (tu auth.js exporta esta función)
     await updateAuthUser(payload)
 
     feedback.value = { message: 'Perfil actualizado correctamente.', type: 'success' }
 
-    // redirect to profile page (optional)
+    // redirecciona a mi perfil
     router.push('/mi-perfil')
   } catch (err) {
     console.error('[MiPerfilEditar] error:', err)

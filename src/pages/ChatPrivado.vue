@@ -1,11 +1,4 @@
 <script setup>
-/*
-  ChatPrivado - versión <script setup>
-  - Importa componentes/composables/servicios que usabas en el ejemplo.
-  - Implementa dos composables locales:
-    * usePrivateChatMessages(user, otherId)
-    * usePrivateChatNewMessageForm(user, otherId)
-*/
 
 import { ref, nextTick, onMounted, onUnmounted } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
@@ -149,7 +142,6 @@ const {
             </div>
         </section>
 
-        <!-- Formulario para enviar nuevo mensaje -->
         <section>
             <h2 class="sr-only">Enviar un mensaje</h2>
 

@@ -1,46 +1,44 @@
-<script>
-import { logout, subscribeToAuthStateChanges } from './services/auth';
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import { logout, subscribeToAuthStateChanges } from './services/auth'
 
-export default {
-    name: 'App',
-    data() {
-        return {
-            // El estado inicial del usuario debe coincidir con lo que devuelve el observer
-            user: {
-                id: null,
-                email: null,
-                avatar_url: null, // Asumimos que esta propiedad se completa en auth.js
-            },
-            unsubscribe: null, // Para guardar la función de desuscripción
-        }
-    },
+// estado
+const user = ref({
+  id: null,
+  email: null,
+  avatar_url: null,
+})
 
-    methods: {
-        handleLogout() {
-            logout();
-            // Asegúrate de que $router esté disponible (si usas Vue Router)
-            if (this.$router) { 
-                this.$router.push('/login');
-            } else {
-                // Si no hay router, puedes recargar la página o manejar la vista de otra forma
-                console.warn('Vue Router no está disponible para la redirección.');
-            }
-        },
-    },
-    mounted() {
-        // Guardamos la función de desuscripción
-        this.unsubscribe = subscribeToAuthStateChanges(newUserState => {
-            // console.log('Estado de auth actualizado:', newUserState);
-            this.user = newUserState;
-        });
-    },
-    // Es buena práctica desuscribirse cuando el componente se destruye
-    beforeUnmount() { 
-        if (this.unsubscribe) {
-            this.unsubscribe();
-        }
-    }
+// Guarda la función de desuscripción
+let unsubscribe = null
+
+// Router
+const router = useRouter()
+
+// metodos
+function handleLogout() {
+  logout()
+
+  if (router) {
+    router.push('/login')
+  } else {
+    console.warn('Vue Router no está disponible para la redirección.')
+  }
 }
+
+//ciclo de vida
+onMounted(() => {
+  unsubscribe = subscribeToAuthStateChanges(newUserState => {
+    user.value = newUserState
+  })
+})
+
+onBeforeUnmount(() => {
+  if (unsubscribe) {
+    unsubscribe()
+  }
+})
 </script>
 
 <template>
@@ -54,7 +52,6 @@ export default {
                     Kälm <span class="text-[#179BAE]">| Skincare & Haircare</span>
                 </p>
             </RouterLink>
-
         </div>
 
         <ul
@@ -101,10 +98,9 @@ export default {
     </nav>
 
     <main
-        class="mx-auto max-w-7xl flex flex-col justify-start items-center min-h-screen py-20 px-4 sm:px-4 md:px-4 lg:px-0 bg-white text-[#1A1A1A]">
+        class="mx-auto max-w-7xl flex flex-col justify-start items-center min-h-screen py-20 px-4 sm:px-4 md:px-4 lg:px-0 bg-white text-[#006165]">
         <RouterView />
     </main>
-
 
     <footer
         class="fixed bottom-0 left-0 w-full flex justify-center items-center h-16 bg-[#006165] text-white rounded-t-[20px] shadow-sm shadow-gray-300 text-center text-sm md:text-base">
